@@ -1,0 +1,3 @@
+[submodule "k8s-kvm"]
+	path = k8s-kvm
+	url = https://github.com/talbotfoundry/k8s-kvm.git
