@@ -82,3 +82,5 @@ kubectl exec -it <pod-name> -- sh
 ```
 
 The `-it` runs the command interactively, so you can interact with the shell.
+
+For more information [Read the Kubernetes Docs](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-running-pod/)
