@@ -80,3 +80,20 @@ variable to use it.
 
 To speed up builds you can add a `.dockerignore` file to skip any directory
 while copying to the container. It works just like `.gitignore`.
+
+## Manage images on your device
+
+If you often build images on your device you will at some time feel the need of
+cleaning up all the cruft that accumulated. To do so:
+
+List all images on your device:
+
+```bash
+docker images
+```
+
+Determine which you want to delete and then run:
+
+```bash
+docker rmi <image-id>
+```
