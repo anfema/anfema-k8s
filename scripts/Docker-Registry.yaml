@@ -1,20 +1,25 @@
 version: '2.0'
 services:
   registry:
-    image: registry:2
+    image: registry:latest
     ports:
       - 5000:5000
     environment:
       - REGISTRY_STORAGE_DELETE_ENABLED=true
     volumes:
       - /mnt/data/docker:/var/lib/registry
+      - ./registry.yaml:/etc/docker/registry/config.yml
     networks:
       - registry-ui-net
 
   ui:
-    image: brennerm/docker-registry-frontend
+    image: joxit/docker-registry-ui:static
     ports:
       - 8080:80
+    environment:
+      - DELETE_IMAGES=true
+      - REGISTRY_URL=http://registry:5000
+      - PULL_URL=http://localhost:5000
     depends_on:
       - registry
     networks:
