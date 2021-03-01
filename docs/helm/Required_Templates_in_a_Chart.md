@@ -105,7 +105,7 @@ This describes the ingress-point of a service, as you can see Helm feature-gates
 this completely (by `.Values.ingress.enabled`). If you do not need routing but
 do it yourself you can skip this file but you will gain flexibility by including
 it. This definition integrates with a defined ingress deployment
-(e.g. `ingress-nginx`) to extend it's definition, so if you ever want to run
+(e.g. `ingress-nginx`) to extend its definition, so if you ever want to run
 your service with an ingress you have to include this file to be able to define
 granular routes. If you don't you only can route complete parts of an URL tree
 to the service (e.g. everything below `/bla/fasel` goes to the service, reverse
@@ -224,7 +224,7 @@ This is the definition file for the Horizontal Pod Autoscaler. You can leave it
 as is to be able to autoscale over RAM and CPU consumption, but be aware this
 may be not the best option to scale.
 
-You can find the [Horizontal Pod Autoscaler Documentation] (https://kubernetes.io/docs/reference/kubernetes-api/workloads-resources/horizontal-pod-autoscaler-v2beta2/)
+You can find the [Horizontal Pod Autoscaler Documentation](https://kubernetes.io/docs/reference/kubernetes-api/workloads-resources/horizontal-pod-autoscaler-v2beta2/)
 on the Kubernetes site to get more information.
 
 ## _helpers.tpl
