@@ -21,6 +21,8 @@
 11. TODO: [Shared Persistent Storage](docs/k8s/Persistent_Storage.md)
 12. TODO: [Network Policies](docs/k8s/Network_Policies.md)
 13. TODO: [Service Accounts](docs/k8s/Service_Accounts.md)
+14. TODO: [Configuration](docs/k8s/Configuration.md)
+14. TODO: [Secrets](docs/k8s/Secrets.md)
 
 ## Helm
 
@@ -32,3 +34,4 @@
 
 1. [Creating a Registry](docs/docker/Registry.md)
 2. [Create Docker Images](docs/docker/Images.md)
+3. [Little helpers](docs/docker/Little_Helpers.md)

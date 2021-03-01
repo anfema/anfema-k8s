@@ -32,7 +32,7 @@ docker tag <image> localhost:5000/<image>
 docker push localhost:5000/<image>
 ```
 
-Removal is as easy:
+Removal for local images is as easy as well:
 
 ```bash
 docker image remove localhost:5000/<image>
@@ -42,3 +42,12 @@ docker image remove localhost:5000/<image>
 
 You can use the docker-compose script in `/scripts/Docker-Registry.yaml` to
 automatically deploy a registry with running UI on `http://localhost:8080`.
+
+## Garbage collect images from registry
+
+If you're running the docker registry script from above you can call the
+garbage collector like this:
+
+```bash
+docker exec scripts_registry_1 registry garbage-collect /etc/docker/registry/config.yml
+```
