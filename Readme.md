@@ -9,7 +9,7 @@
 ## Kubernetes
 
 1. [Technicalities](docs/k8s/Technicalities.md)
-2. TODO: [Creating a Service]()
+2. TODO: [Creating a Service](docs/k8s/Service.md)
 3. [Creating a deployment](docs/k8s/Deployments.md)
 4. [Deploying a Loadbalancer](docs/k8s/Loadbalancer.md)
 5. [Deploying an Ingress](docs/k8s/Ingress.md)
@@ -18,18 +18,17 @@
 8. [Running one off Jobs](docs/k8s/Jobs.md)
 9. [Running Cronjobs](docs/k8s/CronJobs.md)
 10. [Monitoring, Logging, Debugging](docs/k8s/Debug.md)
-11. TODO: [Shared Persistent Storage]()
-12. TODO: [Network Policies]()
-13. TODO: [Service Accounts]()
+11. TODO: [Shared Persistent Storage](docs/k8s/Persistent_Storage.md)
+12. TODO: [Network Policies](docs/k8s/Network_Policies.md)
+13. TODO: [Service Accounts](docs/k8s/Service_Accounts.md)
 
 ## Helm
 
 1. [Creating a Helm Chart](docs/helm/Chart.md)
 2. [Required files in the Templates Directory](docs/helm/Required_Templates_in_a_Chart.md)
-2. TODO: [Service Management]()
+2. TODO: [Service Management](docs/helm/Management.md)
 
 ## Docker Images
 
-1. TODO: [Creating a Repository]()
-2. TODO: [Create Docker Images]()
-3. TODO: [Managing Images on the Repository]()
+1. [Creating a Registry](docs/docker/Registry.md)
+2. [Create Docker Images](docs/docker/Images.md)
