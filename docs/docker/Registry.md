@@ -37,3 +37,11 @@ Removal is as easy:
 ```bash
 docker image remove localhost:5000/<image>
 ```
+
+## Running a registry with UI
+
+You can use the docker-compose script in `/scripts/Docker-Registry.yaml` to
+automatically deploy a registry with running UI on `http://localhost:8080`.
+
+You'll have to configure access to the registry, use `http://registry:5000` as
+an URL as that is the internal URL for the registry on the docker network.
