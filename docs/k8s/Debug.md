@@ -18,6 +18,8 @@ kubectl get pods
 
 There are multiple options on what is happening.
 - `Waiting` waiting for an external resource
+- `ContainerCreating` creating the container, waiting for external resources
+  like required `ConfigMaps` or `Secrets`.
 - `Init:N/M` pods are initializing
 - `Init:Error` the Init phase of a service failed
 - `Init:CrashLoopBackOff` the Init phase has failed multiple times and k8s gave
