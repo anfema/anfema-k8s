@@ -67,3 +67,28 @@ mac-address-blacklist=
 
 [bridge-port]
 ```
+
+## Alternative setup with netplan (ubuntu)
+
+Call the bridge 'br0' if you can.
+Open /etc/netplan/50-cloud-init.yaml with your favorite editor
+
+```
+network:
+    ethernets:
+        enp1s0:
+            dhcp4: true
+    bridges:
+        br0:
+            dhcp4: true
+            interfaces:
+                - enp1s0
+    version: 2
+ ```
+
+ Now run
+ ```
+ netplan apply
+ ```
+
+ Replace `enp1s0` with your ethernet device name.
