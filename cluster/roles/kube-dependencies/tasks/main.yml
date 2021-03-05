@@ -1,0 +1,61 @@
+- name: install Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: true
+
+- name: add docker registry to hosts file
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ registry_ip }} {{ registry_host }} {{ registry_host }}.local"
+    create: yes
+
+- name: allow local registry to be accessed by http
+  lineinfile:
+    path: /etc/docker/daemon.conf
+    line: '{ "insecure-registries": ["{{ registry_host }}:{{ registry_port }}"] }'
+    create: yes
+
+- name: allow insecure registry
+  lineinfile:
+    path: /lib/systemd/system/docker.service
+    regexp: '^ExecStart=.*'
+    line: "ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --insecure-registry {{ registry_host }}:{{ registry_port }}"
+    state: present
+
+- name: install APT Transport HTTPS
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: add Kubernetes apt-key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: add Kubernetes' APT repository
+  apt_repository:
+   repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+   state: present
+   filename: 'kubernetes'
+
+- name: install kubelet
+  apt:
+    name: kubelet=1.20.2-00
+    state: present
+    update_cache: true
+
+- name: install kubeadm
+  apt:
+    name: kubeadm=1.20.2-00
+    state: present
+
+- name: enable service docker
+  service:
+    name: docker
+    enabled: yes
+
+- name: install nfs-common
+  apt:
+    name: nfs-common
+    state: present

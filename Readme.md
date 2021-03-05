@@ -6,6 +6,10 @@
 4. [Deploying k8s](docs/K8S_Deployment.md)
 5. [Installing Helm and running your first app](docs/helm/Installation.md)
 
+You can use the provided `Makefile` in `cluster` to automate steps 3 and 4 and
+set up a local docker registry. Just run `make` in the `cluster` subdir to get
+a help page
+
 ## Kubernetes
 
 1. [Technicalities](docs/k8s/Technicalities.md)
@@ -21,8 +25,7 @@
 11. TODO: [Shared Persistent Storage](docs/k8s/Persistent_Storage.md)
 12. TODO: [Network Policies](docs/k8s/Network_Policies.md)
 13. TODO: [Service Accounts](docs/k8s/Service_Accounts.md)
-14. TODO: [Configuration](docs/k8s/Configuration.md)
-14. TODO: [Secrets](docs/k8s/Secrets.md)
+14. [Configuration and Secrets](docs/k8s/Configuration.md)
 
 ## Helm
 

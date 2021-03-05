@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+#
+
+# Script for creating kvm (Kernel native) vm's for kubernetes
+# best be doing this on a fresh box lest things get cattywampus
+# need a bridge set up under %BRIDGE%
+
+# Net work prefix in which a single digit is appended
+# ex %NETWORK_PREFIX% will have a master at %NETWORK_PREFIX%0 and workers starting from %NETWORK_PREFIX%1
+NETWORK_PREFIX="%NETWORK_PREFIX%"
+
+# make sure libvirt, qemu, kvm etc are installed
+# make sure other hypervisers such as virtualbox are not
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+IMAGE_NAME = "generic/ubuntu2004"
+
+# right now NUM_NODES must be under 9
+NUM_NODES = %NUM_NODES%
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.cpus = %CPUS%
+    libvirt.memory = %MEMORY%
+    libvirt.driver = "kvm"
+  end
+
+  config.vm.define "master1" do |master|
+    master.vm.box = IMAGE_NAME
+    master.vm.network :public_network,
+      :dev => "%BRIDGE%",
+      :mode => "bridge",
+      :type => "bridge",
+      :ip => "#{NETWORK_PREFIX}0"
+    master.vm.hostname = "master"
+  end
+
+  (1..NUM_NODES).each do |i|
+    config.vm.define "worker-#{i}" do |node|
+      node.vm.box = IMAGE_NAME
+      node.vm.network :public_network,
+        :dev => "%BRIDGE%",
+        :mode => "bridge",
+        :type => "bridge",
+        :ip => "#{NETWORK_PREFIX}#{i}"
+      node.vm.hostname = "worker-#{i}"
+    end
+  end
+end

@@ -1,0 +1,10 @@
+.env
+.venv
+env/
+venv/
+ENV/
+.vagrant
+.vagrant/
+group_vars/all.yml
+Vagrantfile
+/hosts
