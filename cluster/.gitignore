@@ -8,3 +8,5 @@ ENV/
 group_vars/all.yml
 Vagrantfile
 /hosts
+loadbalancer.yml
+*.sed

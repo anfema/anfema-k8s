@@ -23,6 +23,7 @@ help:
 	@echo " - vms: initialize vagrant VMs"
 	@echo " - ansible: run ansible to provision VMs"
 	@echo " - registry: set up local container registry with docker-compose"
+	@echo " - loadbalancer: set up a local loadbalancer"
 	@echo
 	@echo "Variables:"
 	@echo " - NETWORK_PREFIX: Prefix of all IPs used in the cluster, default '$(NETWORK_PREFIX)'"
@@ -40,7 +41,7 @@ help:
 .PHONY: clean
 .NOTPARALLEL:
 
-cluster: vms registry ansible
+cluster: vms registry ansible loadbalancer
 
 ansible: hosts group_vars/all.yml
 	ansible-playbook -i hosts bootstrap.yml
@@ -63,7 +64,7 @@ vms: Vagrantfile
 	vagrant halt
 	vagrant up
 
-Vagrantfile:
+Vagrantfile: Vagrantfile.template
 	@echo "Creating Vagrantfile..."
 	@echo "s/%NETWORK_PREFIX%/$(NETWORK_PREFIX)/g" > Vagrantfile.sed
 	@echo "s/%NUM_NODES%/$(NUM_NODES)/g"           >> Vagrantfile.sed
@@ -113,6 +114,20 @@ status:
 
 registry:
 	docker-compose -f ../scripts/Docker-Registry.yaml up -d
+
+loadbalancer: loadbalancer.yml
+	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
+	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml
+	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+	kubectl apply -f loadbalancer.yml
+
+loadbalancer.yml: loadbalancer.template
+	@echo "Creating Loadbalancer config..."
+	@echo "s/%START_IP%/$(NETWORK_PREFIX)00/g" > loadbalancer.sed
+	@echo "s/%END_IP%/$(NETWORK_PREFIX)99/g"   >> loadbalancer.sed
+	@sed -f loadbalancer.sed loadbalancer.template > loadbalancer.yml
+	@rm loadbalancer.sed
+
 
 clean: destroy
 	rm -f Vagrantfile hosts group_vars/all.yml
