@@ -13,7 +13,8 @@ help:
 	@echo "This builds VM cluster for kubernetes"
 	@echo ""
 	@echo "The following targets are available:"
-	@echo " - cluster: Create the VMs and provision them"
+	@echo " - cluster: Create the VMs and provision them, run a local registry"
+	@echo " - cluster_no_registry: Create the VMs and provision them, no registry"
 	@echo " - destroy/clean: Destroy the cluster completely"
 	@echo " - shutdown: Shutdown all VMs of the cluster"
 	@echo " - start: Start previously shutdown cluster"
@@ -42,6 +43,8 @@ help:
 .NOTPARALLEL:
 
 cluster: vms registry ansible loadbalancer
+
+cluster_no_registry: vms ansible loadbalancer
 
 ansible: hosts group_vars/all.yml
 	ansible-playbook -i hosts bootstrap.yml

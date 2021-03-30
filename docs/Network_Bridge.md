@@ -47,6 +47,12 @@ method=auto
 [proxy]
 ```
 
+or use `nmcli`:
+
+```bash
+nmcli connection add type bridge ifname br0 save yes stp false
+```
+
 ## `/etc/NetworkManager/system-connections/bridge-slave-enp6s0.nmconnection`
 
 This sets the network interface `enp6s0` to be a slave of the bridge.
@@ -66,6 +72,13 @@ slave-type=bridge
 mac-address-blacklist=
 
 [bridge-port]
+```
+
+or use `nmcli`:
+
+```bash
+nmcli connection add type bridge-slave master br0 ifname enp6s0 save yes
+nmcli connection up bridge-slave-enp6s0
 ```
 
 ## Alternative setup with netplan (ubuntu)
