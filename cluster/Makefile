@@ -24,6 +24,7 @@ help:
 	@echo " - ansible: run ansible to provision VMs"
 	@echo " - registry: set up local container registry with docker-compose"
 	@echo " - loadbalancer: set up a local loadbalancer"
+	@echo " - ingresscontroller: set up a local ingress controller based on nginx"
 	@echo
 	@echo "Variables:"
 	@echo " - NETWORK_PREFIX: Prefix of all IPs used in the cluster, default '$(NETWORK_PREFIX)'"
@@ -41,7 +42,7 @@ help:
 .PHONY: clean
 .NOTPARALLEL:
 
-cluster: vms registry ansible loadbalancer
+cluster: vms registry ansible loadbalancer ingresscontroller
 
 ansible: hosts group_vars/all.yml
 	ansible-playbook -i hosts bootstrap.yml
@@ -128,6 +129,9 @@ loadbalancer.yml: loadbalancer.template
 	@sed -f loadbalancer.sed loadbalancer.template > loadbalancer.yml
 	@rm loadbalancer.sed
 
+ingresscontroller:
+	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm install nginx ingress-nginx/ingress-nginx
 
 clean: destroy
 	rm -f Vagrantfile hosts group_vars/all.yml
