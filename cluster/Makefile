@@ -1,12 +1,13 @@
-NETWORK_PREFIX=10.0.5.1
-MASTER_IP=$(NETWORK_PREFIX)0
-NUM_NODES=3
-CPUS=2
-MEMORY=4096
-BRIDGE=br0
-REGISTRY_IP=`ip addr show dev br0 scope global | sed -En -e 's/.*inet ([0-9.]+).*/\1/p'`
-REGISTRY_HOST=docker-registry
-REGISTRY_PORT=5000
+NETWORK_PREFIX = 10.0.5.1
+MASTER_IP = $(NETWORK_PREFIX)0
+NUM_NODES = 3
+CPUS = 2
+MEMORY = 4096
+BRIDGE = br0
+DOCKER_REGISTRY ?= docker-registry
+DOCKER_REGISTRY_PORT ?= 5000
+DOCKER_REGISTRY_IP ?= `getent hosts $(DOCKER_REGISTRY) | cut -d " " -f 1`
+
 SSH_PUBKEY=`cat ~/.ssh/id_ed25519.pub || cat ~/.ssh/id_rsa.pub`
 
 help:
@@ -34,9 +35,9 @@ help:
 	@echo " - CPUS: Number of CPU cores per node, default '$(CPUS)'"
 	@echo " - MEMORY: Amount of RAM for each node, default '$(MEMORY)'"
 	@echo " - BRIDGE: Name of the bridge network device, default '$(BRIDGE)'"
-	@echo " - REGISTRY_IP: IP address of the local registry, default '$(REGISTRY_IP)'"
-	@echo " - REGISTRY_HOST: Hostname of the local registry, default '$(REGISTRY_HOST)'"
-	@echo " - REGISTRY_PORT: Port of the local registry, default '$(REGISTRY_PORT)'"
+	@echo " - DOCKER_REGISTRY_IP: IP address of the local registry, default '$(DOCKER_REGISTRY_IP)'"
+	@echo " - DOCKER_REGISTRY_HOST: Hostname of the local registry, default '$(DOCKER_REGISTRY_HOST)'"
+	@echo " - DOCKER_REGISTRY_PORT: Port of the local registry, default '$(DOCKER_REGISTRY_PORT)'"
 	@echo " - SSH_PUBKEY: Public key to add to all nodes as user 'kube', default your key from ~/.ssh/"
 
 
@@ -93,9 +94,9 @@ hosts:
 group_vars/all.yml:
 	@echo "Configuring ansible..."
 	@echo "master_ip: $(MASTER_IP)"          > group_vars/all.yml
-	@echo "registry_ip: $(REGISTRY_IP)"      >> group_vars/all.yml
-	@echo "registry_host: $(REGISTRY_HOST)"  >> group_vars/all.yml
-	@echo "registry_port: $(REGISTRY_PORT)"  >> group_vars/all.yml
+	@echo "registry_ip: $(DOCKER_REGISTRY_IP)"      >> group_vars/all.yml
+	@echo "registry_host: $(DOCKER_REGISTRY_HOST)"  >> group_vars/all.yml
+	@echo "registry_port: $(DOCKER_REGISTRY_PORT)"  >> group_vars/all.yml
 	@echo "ssh_pubkey: $(SSH_PUBKEY)"        >> group_vars/all.yml
 
 
