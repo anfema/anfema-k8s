@@ -114,14 +114,16 @@ status:
 	@echo "--------------------------------------------------------------------"
 	@kubectl get pods || true
 	@echo
-	@echo "Registry Status:"
+	@echo "Docker Status:"
 	@echo "--------------------------------------------------------------------"
-	@docker-compose -f ../scripts/Docker-Registry.yaml ps
+	@docker ps -s --format "table {{.ID}}\t{{.Image}}\t{{.CreatedAt}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"
 
 registry:
 	@mkdir -p data/registry
 	DATA_PATH=`pwd`/data/registry docker-compose -f ../scripts/Docker-Registry.yaml up -d
 	@echo "--------------------------------------------------------------------"
+	@echo "Docker registry is running..."
+	@echo " -> data will be stored in `pwd`/data/registry/"
 	@echo "Access docker registry UI at http://localhost:8080"
 	@echo "Access docker registry API at http://localhost:5000"
 	@echo "--------------------------------------------------------------------"
@@ -132,7 +134,7 @@ minio:
 	@echo "--------------------------------------------------------------------"
 	@echo "Minio access credentials: minioadmin // minioadmin"
 	@echo " -> data will be stored in `pwd`/data/minio/"
-	@echo "Access minio on http://`docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' minio`:9000"
+	@echo "Access minio on http://localhost:9000"
 	@echo "--------------------------------------------------------------------"
 
 loadbalancer: loadbalancer.yml
