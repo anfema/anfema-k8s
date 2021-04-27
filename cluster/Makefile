@@ -27,6 +27,7 @@ help:
 	@echo " - registry: set up local container registry with docker-compose"
 	@echo " - loadbalancer: set up a local loadbalancer"
 	@echo " - ingresscontroller: set up a local ingress controller based on nginx"
+	@echo " - minio: S3 Storage API and Backend"
 	@echo
 	@echo "Variables:"
 	@echo " - NETWORK_PREFIX: Prefix of all IPs used in the cluster, default '$(NETWORK_PREFIX)'"
@@ -44,9 +45,9 @@ help:
 .PHONY: clean
 .NOTPARALLEL:
 
-cluster: vms registry ansible loadbalancer ingresscontroller
+cluster: vms registry ansible loadbalancer ingresscontroller minio
 
-cluster_no_registry: vms ansible loadbalancer
+cluster_no_registry: vms ansible loadbalancer minio
 
 ansible: hosts group_vars/all.yml
 	ansible-playbook -i hosts bootstrap.yml
@@ -118,7 +119,21 @@ status:
 	@docker-compose -f ../scripts/Docker-Registry.yaml ps
 
 registry:
-	docker-compose -f ../scripts/Docker-Registry.yaml up -d
+	@mkdir -p data/registry
+	DATA_PATH=`pwd`/data/registry docker-compose -f ../scripts/Docker-Registry.yaml up -d
+	@echo "--------------------------------------------------------------------"
+	@echo "Access docker registry UI at http://localhost:8080"
+	@echo "Access docker registry API at http://localhost:5000"
+	@echo "--------------------------------------------------------------------"
+
+minio:
+	@mkdir -p data/minio
+	docker run -d --name minio -p 9000:9000 -v `pwd`/data/minio:/data minio/minio server /data
+	@echo "--------------------------------------------------------------------"
+	@echo "Minio access credentials: minioadmin // minioadmin"
+	@echo " -> data will be stored in `pwd`/data/minio/"
+	@echo "Access minio on http://`docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' minio`:9000"
+	@echo "--------------------------------------------------------------------"
 
 loadbalancer: loadbalancer.yml
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml
@@ -143,11 +158,14 @@ clean: destroy
 destroy:
 	vagrant destroy -f || true
 	docker-compose -f ../scripts/Docker-Registry.yaml down
+	docker rm -f minio
 
 shutdown:
 	vagrant halt
 	docker-compose -f ../scripts/Docker-Registry.yaml stop
+	docker stop minio
 
 start:
 	vagrant up
 	docker-compose -f ../scripts/Docker-Registry.yaml start
+	docker start minio

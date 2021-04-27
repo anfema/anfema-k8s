@@ -10,3 +10,4 @@ Vagrantfile
 /hosts
 loadbalancer.yml
 *.sed
+data/

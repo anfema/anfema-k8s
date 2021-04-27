@@ -7,7 +7,7 @@ services:
     environment:
       - REGISTRY_STORAGE_DELETE_ENABLED=true
     volumes:
-      - /mnt/data/docker:/var/lib/registry
+      - $DATA_PATH:/var/lib/registry
       - ./registry.yaml:/etc/docker/registry/config.yml
     networks:
       - registry-ui-net
